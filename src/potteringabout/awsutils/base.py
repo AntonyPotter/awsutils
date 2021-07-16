@@ -25,9 +25,12 @@ class Base(object):
     for account in accounts:
       o=cls(account=account["Id"], role=role)
       if hasattr(o, func_name) and callable(getattr(o, func_name)):
-        f = getattr(o, func_name)
-        r = f(**kwargs)
-        response.append({"accountId": account["Id"], "response": r})  
+        try:
+          f = getattr(o, func_name)
+          r = f(**kwargs)
+          response.append({"account": account, "items": r})  
+        except Exception as e:
+          response.append({"account": account, "exception": e})  
     return response
 
   def __init__(self, account=None, role=None):
