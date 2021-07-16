@@ -20,14 +20,22 @@ class Org(Base):
       attr="Accounts"
     )
   
-  def accounts(self, filter=None):
+  def accounts(self, include_filter=None, exclude_filter=None):
     accounts = []
-    if filter:
+    if not include_filter and not exclude_filter:
+      return self.__accounts
+
+    if include_filter:
       for account in self.__accounts:
-        for f in filter:
-          p = re.compile(filter[f])
-          if p.match(account[f]):
-            accounts.append(account)
-    else:
-      accounts = self.__accounts
+        for fs in include_filter:
+          for f in include_filter[fs]:
+            p = re.compile(f)
+            if p.match(account[fs]):
+              accounts.append(account)
+    if exclude_filter:
+      for fs in exclude_filter:
+        for f in exclude_filter[fs]:
+          p = re.compile(f)
+          accounts = [i for i in accounts if not p.match(i[fs])]
+
     return accounts

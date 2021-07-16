@@ -1,0 +1,13 @@
+org:
+  account: 559932348314
+  assumed_role: OrganizationReadOnly
+account:
+  assumed_role: Infra-Builder
+  filter:
+    Name: 
+      - ".*Production"
+  exclude_filter:
+    Name: 
+      - ".*Non-Production"
+    Id: 
+      - "346201620570"

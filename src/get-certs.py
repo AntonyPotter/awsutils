@@ -11,9 +11,16 @@ if __name__ == "__main__":
   with open("accounts.yml", 'r') as stream:
     config = yaml.safe_load(stream)
 
-  o = Org(account=str(config["org"]["account"]), role=config["org"]["assumed_role"])
+  org = Org(account=str(config["org"]["account"]), role=config["org"]["assumed_role"])
   filter = config["account"]["filter"] if "filter" in config["account"] else None 
-  Certs.run(accounts=o.accounts(filter=filter), role=config["account"]["assumed_role"], func_name="list_certificates")
+  exclude_filter = config["account"]["exclude_filter"] if "exclude_filter" in config["account"] else None 
+
+  accounts = org.accounts(include_filter=filter, exclude_filter=exclude_filter)
+
+  response = Certs.run(accounts=accounts, role=config["account"]["assumed_role"], func_name="list_certificates")
+  
+  print(response)
+
 
   
   
