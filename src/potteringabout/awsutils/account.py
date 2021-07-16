@@ -6,7 +6,6 @@ class Account:
   credentials = {}
 
   def assume_role(self, accountId, role):
-    global credentials
     cred = "{}::{}".format(accountId, role)
     if cred not in self.credentials:
       try:
@@ -26,6 +25,16 @@ class Account:
       self.credentials[cred]=assumed_role_object['Credentials']
     return self.credentials[cred]
 
+  def client(self, accountId, rtype, role):
+    creds = self.assume_role(accountId=accountId, role=role)
+    client=boto3.client(
+      rtype,
+      aws_access_key_id=creds['AccessKeyId'],
+      aws_secret_access_key=creds['SecretAccessKey'],
+      aws_session_token=creds['SessionToken']
+    )
+    return client
+
   def resource(self, accountId, rtype, role):
     creds = self.assume_role(accountId=accountId, role=role)
     ec2_resource=boto3.resource(
@@ -36,12 +45,16 @@ class Account:
     )
     return ec2_resource
 
-  def client(self, accountId, rtype, role):
-    creds = self.assume_role(accountId=accountId, role=role)
-    client=boto3.client(
-      rtype,
-      aws_access_key_id=creds['AccessKeyId'],
-      aws_secret_access_key=creds['SecretAccessKey'],
-      aws_session_token=creds['SessionToken']
-    )
-    return client
+account = None
+def client(accountId, rtype, role):
+  global account
+  if not account:
+    account = Account()
+  return account.client(accountId=accountId, rtype=rtype, role=role)
+
+def resource(accountId, rtype, role):
+  global account
+  if not account:
+    account = Account()
+  return account.resource(accountId=accountId, rtype=rtype, role=role)
+

@@ -4,6 +4,10 @@ This package was built following the instructions [here](https://packaging.pytho
 
     $ python3 -m build
 
+Having created a user in pypi authentication tokens are stored in.
+
+    ~/.pypirc
+
 To upload to the test pypi
 
     $ python3 -m twine upload --repository testpypi dist/*
