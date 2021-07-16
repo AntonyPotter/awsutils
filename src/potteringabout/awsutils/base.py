@@ -19,6 +19,17 @@ class Base(object):
   def clients(self):
     raise NotImplementedError
 
+  @classmethod
+  def run(cls, accounts, role, func_name, **kwargs):
+    response = []
+    for account in accounts:
+      o=cls(account=account["Id"], role=role)
+      if hasattr(o, func_name) and callable(getattr(o, func_name)):
+        f = getattr(o, func_name)
+        r = f(**kwargs)
+        response.append({"accountId": account["Id"], "response": r})  
+    return response
+
   def __init__(self, account=None, role=None):
     self.c = {}
     self.r = {}

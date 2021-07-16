@@ -29,12 +29,13 @@ if __name__ == "__main__":
   #print(client.list_subnets())
   #all(Network)
   
-  o = Org(filter={"Name":"SubAccount"})
-  print(o.accounts)
-  #r = o.run(pkg="potteringabout.awsutils.network", cls="Network", role="Infra-Builder", func_name="list_vpcs")
-  r = o.run(cls="Network", role="Infra-Builder", func_name="list_vpcs")
-  print(r)
-  
-  print_classes()
+  o = Org(account="559932348314", role="OrganizationReadOnly")
+  #print(o.accounts)
+  #r = o.run(cls="Network", role="Infra-Builder", func_name="list_vpcs")
+  #r = o.run(cls="Network", role="Infra-Builder", func_name="list_vpcs")
+  #print(r)
+  #Network.run(accounts=o.accounts(filter={"Name":"Zaptic Dev"}), role="Infra-Builder", func_name="list_vpcs")
+  Certs.run(accounts=o.accounts(filter={"Name":"Zaptic Dev"}), role="Infra-Builder", func_name="list_certificates")
+  #print_classes()
   
   
